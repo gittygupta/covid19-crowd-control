@@ -77,14 +77,3 @@ while(True):
 cap.release()
 cv2.destroyAllWindows()
 
-
-'''
-        cv2.putText(image, label,
-                    (box[0]+20, box[1]+40),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,  # font scale
-                    (255, 0, 255),
-                    2)  # line type
-'''
-
-
