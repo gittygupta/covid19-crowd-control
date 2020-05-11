@@ -26,6 +26,8 @@ cap = cv2.VideoCapture('vids/vid.mp4')
 
 while(True):
     ret, image = cap.read()
+    if not ret:
+        break
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
@@ -43,11 +45,11 @@ while(True):
     print(image.shape)
 
     # change brightness
-    low_bright = change_brightness(image, -80)
+    low_bright = change_brightness(image, -50)
     
     # restoring brightness of boxes
     for box in people:
-        low_bright[int(box[1]):int(box[3]), int(box[0]):int(box[2]), :] = image[int(box[1]):int(box[3]), int(box[0]):int(box[2]), :]
+        low_bright[int(box[1]):int(box[3]), int(box[0]):int(box[2]), :] = change_brightness(image[int(box[1]):int(box[3]), int(box[0]):int(box[2]), :], 30)
     image = low_bright
     
     # check
