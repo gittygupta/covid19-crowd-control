@@ -9,8 +9,27 @@ width = 2
 area_ratio = 0.75
 distance_factor = 1
 
+def verify_alpha_channel(image):
+    try:
+        image.shape[3]  # 4th position
+    except IndexError:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
+    return image
+
 def change_brightness(image, value):
     return cv2.add(image, np.array([float(value)]))
+
+def apply_red(image, intensity):
+    blue = 0
+    green = 0
+    red = 200
+    image = verify_alpha_channel(image)
+    image_h, image_w, image_c = image.shape
+    color_bgra = (blue, green, red, 1)
+    overlay = np.full((image_h, image_w, 4), color_bgra, dtype='uint8')
+    cv2.addWeighted(overlay, intensity, image, 1.0, 0, image)
+    image = cv2.cvtColor(image, cv2.COLOR_BGRA2BGR)
+    return image
 
 model_path = 'models/mobilenet-v1-ssd-mp-0_675.pth'
 label_path = 'models/voc-model-labels.txt'
@@ -71,6 +90,8 @@ while(True):
     # coloring
     for i in range(len(people)):
         box = people[i]
+        #if colors[i] == red:
+        #    image[int(box[1]):int(box[3]), int(box[0]):int(box[2]), :] = apply_red(image[int(box[1]):int(box[3]), int(box[0]):int(box[2]), :], 0.5)
         cv2.rectangle(image, (box[0], box[1]), (box[2], box[3]), colors[i], width)
         
     
